@@ -1,84 +1,95 @@
-import { reactive } from "vue";
-import { defineStore } from "pinia";
-import axios from "axios";
+import { reactive } from 'vue';
+import { defineStore } from 'pinia';
+import axios from 'axios';
 
-export const useTransactionStore = defineStore("transaction", () => {
-  const BaseUri = "/api/transactions";
+export const useTransactionStore = defineStore('transaction', () => {
+  // [5-1] API 기본 경로
+  const BaseUri = '/api/transactions';
 
   // [5-1] 공용 거래 데이터 상태 정의
   const State = reactive({
     Transactions: [],
-    SelectedPeriod: "all",
-    SelectedCategory: "all",
+    SelectedPeriod: 'all',
+    SelectedCategory: 'all',
     IsLoading: false,
     IsError: false,
-    ErrorMessage: "",
+    ErrorMessage: '',
   });
 
-  // [2-1] 거래 목록 조회용 기본 API 함수
+  // [2-1] 거래 목록 조회
   const FetchTransactions = async () => {
+    State.IsLoading = true;
     try {
-      // TODO: [2-1] 거래 목록 조회 기능 구현
-      // axios.get(BaseUri) 사용
+      // TODO: [2-1] Step 1 - const Response = await axios.get(BaseUri)
+      // TODO: [2-1] Step 2 - State.Transactions = Response.data
     } catch (Error) {
-      console.error(Error);
-    }
-  };
-
-  // [1-4] 거래 등록용 기본 API 함수
-  const CreateTransaction = async (TransactionData) => {
-    // TODO: [1-4] Step 1 - 로딩 상태 시작
-    // State.IsLoading = true
-
-    try {
-      // TODO: [1-4] Step 2 - axios.post로 새 거래 전송
-      // const Response = await axios.post(BaseUri, TransactionData)
-
-      // TODO: [1-4] Step 3 - 성공 시 로컬 상태에도 추가 (목록 새로고침 없이 반영)
-      // State.Transactions.push(Response.data)
-
-      // TODO: [1-4] Step 4 - 필요 시 에러 상태 초기화
-      // State.IsError = false
-      // State.ErrorMessage = ''
-
-    } catch (Error) {
-      // TODO: [1-4] Step 5 - 에러 상태 기록
-      // State.IsError = true
-      // State.ErrorMessage = Error.message
+      State.IsError = true;
+      State.ErrorMessage = Error.message;
       console.error(Error);
     } finally {
-      // TODO: [1-4] Step 6 - 로딩 상태 종료 (성공/실패 상관없이 실행)
-      // State.IsLoading = false
+      State.IsLoading = false;
     }
   };
 
-  // [4-1] 기존 거래 조회용 기본 API 함수
+  // [1-4] 수입/지출 데이터 저장 API 호출 (단건)
+  const CreateTransaction = async (TransactionData) => {
+    State.IsLoading = true;
+    try {
+      const Response = await axios.post(BaseUri, TransactionData);
+      State.Transactions.push(Response.data);
+      State.IsError = false;
+      State.ErrorMessage = '';
+    } catch (Error) {
+      State.IsError = true;
+      State.ErrorMessage = Error.message;
+      console.error(Error);
+    } finally {
+      State.IsLoading = false;
+    }
+  };
+
+  // [4-1] 기존 거래 데이터 불러오기 (단건)
   const FetchTransactionById = async (Id) => {
+    State.IsLoading = true;
     try {
-      // TODO: [4-1] 기존 거래 단건 조회 기능 구현
-      // axios.get(`${BaseUri}/${Id}`) 사용
+      // TODO: [4-1] Step 1 - const Response = await axios.get(`${BaseUri}/${Id}`)
+      // TODO: [4-1] Step 2 - return Response.data
     } catch (Error) {
+      State.IsError = true;
+      State.ErrorMessage = Error.message;
       console.error(Error);
+    } finally {
+      State.IsLoading = false;
     }
   };
 
-  // [4-2] 기존 거래 수정용 기본 API 함수
+  // [4-2] 기존 거래 수정 API 호출
   const UpdateTransaction = async (Id, TransactionData) => {
+    State.IsLoading = true;
     try {
-      // TODO: [4-2] 기존 거래 수정 기능 구현
-      // axios.put(`${BaseUri}/${Id}`, TransactionData) 사용
+      // TODO: [4-2] Step 1 - const Response = await axios.put(`${BaseUri}/${Id}`, TransactionData)
+      // TODO: [4-2] Step 2 - State.Transactions 에서 해당 id 항목을 Response.data로 교체
     } catch (Error) {
+      State.IsError = true;
+      State.ErrorMessage = Error.message;
       console.error(Error);
+    } finally {
+      State.IsLoading = false;
     }
   };
 
-  // [2-5] 거래 삭제용 기본 API 함수
+  // [2-5] 거래 삭제 API 호출
   const DeleteTransaction = async (Id) => {
+    State.IsLoading = true;
     try {
-      // TODO: [2-5] 거래 삭제 기능 구현
-      // axios.delete(`${BaseUri}/${Id}`) 사용
+      // TODO: [2-5] Step 1 - await axios.delete(`${BaseUri}/${Id}`)
+      // TODO: [2-5] Step 2 - State.Transactions = State.Transactions.filter(t => t.id !== Id)
     } catch (Error) {
+      State.IsError = true;
+      State.ErrorMessage = Error.message;
       console.error(Error);
+    } finally {
+      State.IsLoading = false;
     }
   };
 
@@ -94,22 +105,22 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   // [2-4] 기간 조건에 맞는 거래 필터링
   const FilterTransactionsByPeriod = () => {
-    // TODO: [2-4] 기간 필터 로직 구현
+    // TODO: [2-4] State.SelectedPeriod 기준으로 State.Transactions 필터링 후 반환
   };
 
   // [2-4] 카테고리 조건에 맞는 거래 필터링
   const FilterTransactionsByCategory = () => {
-    // TODO: [2-4] 카테고리 필터 로직 구현
+    // TODO: [2-4] State.SelectedCategory 기준으로 State.Transactions 필터링 후 반환
   };
 
-  // [3-2] 월별 수입/지출/순이익 계산
+  // [3-1] 월별 수입/지출 합계 계산
   const CalculateMonthlySummary = () => {
-    // TODO: [3-2] 월별 요약 계산 로직 구현
+    // TODO: [3-1] State.Transactions를 월별로 그룹화하여 income/expense 합계 계산 후 반환
   };
 
-  // [3-4] 최근 거래 내역 3~5개 추출
+  // [3-4] 최근 거래 내역 추출
   const GetRecentTransactions = () => {
-    // TODO: [3-4] 최근 거래 내역 추출 로직 구현
+    // TODO: [3-4] State.Transactions를 날짜 내림차순 정렬 후 slice(0, 5) 반환
   };
 
   return {
