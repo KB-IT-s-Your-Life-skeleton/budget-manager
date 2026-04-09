@@ -1,20 +1,17 @@
 <template>
-  <div class="AppLayout">
+  <div>
+    <!-- Header -->
     <Header />
 
-    <div class="AppBody">
-      <Sidebar />
-
-      <main class="MainContent">
-        <router-view />
-      </main>
-    </div>
+    <!-- Main Contents -->
+    <main>
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script setup>
-import Header from "@/components/Header.vue";
-import Sidebar from "@/components/Sidebar.vue";
+import Header from '@/components/Header.vue';
 </script>
 
 <style>
@@ -24,20 +21,7 @@ import Sidebar from "@/components/Sidebar.vue";
 </style>
 
 <style scoped>
-.AppLayout {
-  min-height: 100vh;
-  background-color: #f5f7fb;
-  color: #222222;
-}
-
-.AppBody {
-  display: flex;
-  min-height: calc(100vh - 64px);
-}
-
-.MainContent {
-  flex: 1;
-  padding: 24px;
-  overflow-x: hidden;
+main {
+  padding: 20px;
 }
 </style>
