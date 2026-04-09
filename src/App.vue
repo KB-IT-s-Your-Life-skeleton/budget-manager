@@ -17,6 +17,12 @@ import Header from "@/components/Header.vue";
 import Sidebar from "@/components/Sidebar.vue";
 </script>
 
+<style>
+* {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+</style>
+
 <style scoped>
 .AppLayout {
   min-height: 100vh;
